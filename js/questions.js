@@ -1,38 +1,86 @@
-// 座標は概略位置。地図は正距円筒図法（横360度・縦180度）を想定。
-// map: [西端経度, 東端経度, 南端緯度, 北端緯度]
-window.QUESTIONS = [
-{category:"国境・緯度経度",prompt:"アラスカとカナダの境界付近を通る経線は西経何度？",answers:["西経141度","西経141°","141度","141°","141"],lon:-141,lat:62,map:[-155,-125,52,72]},
-{category:"国境・緯度経度",prompt:"カナダとアメリカの国境の大部分をなす緯線は北緯何度？",answers:["北緯49度","北緯49°","49度","49°","49"],lon:-100,lat:49,map:[-130,-65,40,58]},
-{category:"国境・緯度経度",prompt:"エジプトとリビアの国境付近を通る経線は東経何度？",answers:["東経25度","東経25°","25度","25°","25"],lon:25,lat:25,map:[10,36,15,33]},
-{category:"国境・緯度経度",prompt:"エジプトとスーダンの国境付近を通る緯線は北緯何度？",answers:["北緯22度","北緯22°","22度","22°","22"],lon:31,lat:22,map:[20,38,15,30]},
-{category:"国境・緯度経度",prompt:"サンベルトの北側の目安となる緯度は北緯何度？",answers:["北緯37度","北緯37°","37度","37°","37"],lon:-100,lat:37,map:[-125,-65,24,50]},
-{category:"水域・河川・地形",prompt:"紅海とアデン湾を結ぶ海峡は？",answers:["マンダブ海峡","バブ・エル・マンデブ海峡","バベルマンデブ海峡"],lon:43.3,lat:12.6,map:[38,50,7,19]},
-{category:"水域・河川・地形",prompt:"ドイツとポーランドの国境付近を流れる川は？",answers:["オーデル・ナイセ川","オーデル川","ナイセ川"],lon:14.5,lat:52,map:[10,20,48,56]},
-{category:"農業・産業・地域",prompt:"イランでの地下水路式灌漑施設の呼び名は？",answers:["カナート"],lon:53,lat:32,map:[42,65,24,40]},
-{category:"農業・産業・地域",prompt:"北アフリカで見られる地下水路式灌漑施設の呼び名は？",answers:["フォガラ"],lon:3,lat:29,map:[-12,15,18,38]},
-{category:"農業・産業・地域",prompt:"アフガニスタンや中央アジアなどの地下水路式灌漑施設の呼び名は？",answers:["カレーズ"],lon:67,lat:34,map:[55,75,27,42]},
-{category:"水域・河川・地形",prompt:"ガーナにある、ボルタ川をせき止めて造られたダムは？",answers:["アコソンボダム","アコソンボ・ダム"],lon:-0.05,lat:6.3,map:[-4,2,3,11]},
-{category:"都市・首都",prompt:"アイルランドの首都は？",answers:["ダブリン"],lon:-6.26,lat:53.35,map:[-11,-5,51,56]},
-{category:"都市・首都",prompt:"ノルウェーの首都は？",answers:["オスロ"],lon:10.75,lat:59.9,map:[4,16,55,64]},
-{category:"都市・首都",prompt:"フィンランドの首都は？",answers:["ヘルシンキ"],lon:24.94,lat:60.17,map:[18,32,58,66]},
-{category:"都市・首都",prompt:"スウェーデンの首都は？",answers:["ストックホルム"],lon:18.07,lat:59.33,map:[10,24,54,66]},
-{category:"水域・河川・地形",prompt:"イタリア北東部の平野を含む地域名は？（元資料の表記）",answers:["パダノヴェネタ山脈","パダノヴェネタ"],lon:11,lat:45,map:[6,16,42,48]},
-{category:"水域・河川・地形",prompt:"シベリア南部にある世界で最も深い湖は？",answers:["バイカル湖"],lon:108,lat:53.5,map:[98,118,48,58]},
-{category:"都市・首都",prompt:"カナダで英語が主に使われる都市は？",answers:["トロント"],lon:-79.38,lat:43.65,map:[-84,-72,40,48]},
-{category:"都市・首都",prompt:"カナダのケベック州にあり、フランス語が主に使われる都市は？",answers:["モントリオール"],lon:-73.57,lat:45.5,map:[-79,-68,43,50]},
-{category:"農業・産業・地域",prompt:"ブラジルの大規模な商業的農場の呼び名は？",answers:["ファゼンダ"],lon:-52,lat:-12,map:[-65,-40,-25,5]},
-{category:"農業・産業・地域",prompt:"アルゼンチンなどの大牧場の呼び名は？",answers:["エスタンシア"],lon:-64,lat:-35,map:[-72,-55,-42,-25]},
-{category:"農業・産業・地域",prompt:"中南米で見られた大土地所有制の農園の呼び名は？",answers:["アシエンダ"],lon:-99,lat:20,map:[-110,-86,14,29]},
-{category:"歴史・文化",prompt:"ユカタン半島などで高度な文明を築いた古代文明は？",answers:["マヤ文明","マヤ"],lon:-89,lat:19,map:[-96,-82,14,23]},
-{category:"水域・河川・地形",prompt:"メキシコ南東部に突き出す半島は？",answers:["ユカタン半島"],lon:-89,lat:20,map:[-96,-84,16,24]},
-{category:"歴史・文化",prompt:"現在のメキシコ中央部を中心に栄えた古代文明は？",answers:["アステカ文明","アステカ"],lon:-99,lat:19,map:[-106,-91,14,25]},
-{category:"水域・河川・地形",prompt:"メキシコ中央部に広がる高原は？",answers:["メキシコ高原"],lon:-102,lat:23,map:[-110,-92,17,30]},
-{category:"歴史・文化",prompt:"アンデス地域で栄えた古代文明は？",answers:["インカ文明","インカ"],lon:-72,lat:-13.5,map:[-82,-65,-22,2]},
-{category:"水域・河川・地形",prompt:"南アメリカ西部を南北に連なる大山脈は？",answers:["アンデス山脈","アンデス"],lon:-72,lat:-15,map:[-82,-65,-25,5]},
-{category:"水域・河川・地形",prompt:"ベネズエラを流れ、大西洋に注ぐ南アメリカ北部の大河は？",answers:["オリノコ川"],lon:-66,lat:7,map:[-72,-59,0,12]},
-{category:"農業・産業・地域",prompt:"ベネズエラのオリノコ川流域に広がる熱帯草原は？",answers:["リャノ","リャノス"],lon:-67,lat:8,map:[-72,-60,2,12]},
-{category:"農業・産業・地域",prompt:"ブラジル高原北部などに見られる熱帯草原の呼び名は？",answers:["カンポ"],lon:-47,lat:-10,map:[-55,-40,-18,0]},
-{category:"農業・産業・地域",prompt:"ブラジル高原に広がるサバナ植生地域は？",answers:["セラード"],lon:-47,lat:-15,map:[-55,-40,-23,-5]},
-{category:"農業・産業・地域",prompt:"メキシコとアメリカの国境付近の輸出向け組立工場に関連する用語は？",answers:["マキラドーラ"],lon:-106,lat:31.7,map:[-116,-96,25,37]},
-{category:"農業・産業・地域",prompt:"ブラジルなどの都市周辺に形成された貧困層の居住地区は？",answers:["ファベーラ"],lon:-46.6,lat:-23.6,map:[-50,-43,-26,-20]}
-];
+(() => {
+const $=id=>document.getElementById(id), canvas=$("map"),ctx=canvas.getContext("2d"),img=new Image();
+img.src="assets/world-map-natural-earth.png";
+let pool=[],i=0,right=0,tried=0,current=null,locked=false;
+const norm=s=>s.toLowerCase().replace(/[\s　・･.,，。()（）]/g,"").replace(/[‐‑‒–—−]/g,"-");
+function stats(){
+  const shown = current ? Math.min(i+1,pool.length) : pool.length;
+  $("progress").textContent=`${shown} / ${pool.length}`;
+  $("correct").textContent=right;
+  $("rate").textContent=`${tried?Math.round(right/tried*100):0}%`;
+}
+function project(lon,lat,q,w,h){
+  const [west,east,south,north]=q.map;
+  return {x:(lon-west)/(east-west)*w,y:(north-lat)/(north-south)*h};
+}
+function drawGeometry(q,w,h){
+  if(!q.geometry || !Array.isArray(q.geometry.points)) return;
+  const pts=q.geometry.points.map(([lon,lat])=>project(lon,lat,q,w,h));
+  if(pts.length<2)return;
+  ctx.save();
+  ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+  for(let k=1;k<pts.length;k++)ctx.lineTo(pts[k].x,pts[k].y);
+  if(q.geometry.type==="polygon")ctx.closePath();
+  if(q.geometry.type==="polygon"){
+    ctx.fillStyle="rgba(238,145,45,.28)";ctx.fill();
+    ctx.lineWidth=2.5;ctx.strokeStyle="#d87921";ctx.stroke();
+  }else{
+    ctx.lineWidth=4;ctx.lineCap="round";ctx.lineJoin="round";
+    ctx.strokeStyle="#087eaa";ctx.stroke();
+    ctx.lineWidth=1.5;ctx.strokeStyle="white";ctx.stroke();
+  }
+  ctx.restore();
+}
+function map(q){
+  const [west,east,south,north]=q.map,ratio=(east-west)/(north-south);let w=1100,h=w/ratio;
+  if(h>540){h=540;w=h*ratio;}
+  canvas.width=Math.round(w);canvas.height=Math.round(h);
+  if(!img.complete||!img.naturalWidth){$("mapMessage").textContent="assets/world-map-natural-earth.png が見つかりません。";return;}
+  $("mapMessage").textContent="";
+  const sx=(west+180)/360*img.naturalWidth,sy=(90-north)/180*img.naturalHeight,sw=(east-west)/360*img.naturalWidth,sh=(north-south)/180*img.naturalHeight;
+  ctx.clearRect(0,0,w,h);ctx.drawImage(img,sx,sy,sw,sh,0,0,w,h);
+  drawGeometry(q,w,h);
+  const {x,y}=project(q.lon,q.lat,q,w,h);
+  // 点は補助表示。線・面の対象では図形自体が主役になる。
+  if(!q.geometry){
+    ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fillStyle="#e34b36";ctx.fill();ctx.lineWidth=3;ctx.strokeStyle="white";ctx.stroke();
+    ctx.beginPath();ctx.arc(x,y,16,0,Math.PI*2);ctx.lineWidth=2;ctx.strokeStyle="#e34b36";ctx.stroke();
+  }
+}
+function next(){
+  if(i>=pool.length){
+    $("question").textContent=`終了！ ${pool.length}問中 ${right}問正解でした。`;
+    $("category").textContent="終了";$("answer").disabled=true;$("submit").disabled=true;$("next").disabled=true;$("showAnswer").disabled=true;
+    current=null;locked=true;stats();return;
+  }
+  current=pool[i];locked=false;$("category").textContent=current.category;$("question").textContent=current.prompt;
+  $("feedback").textContent="";$("feedback").className="feedback";$("answer").value="";$("answer").disabled=false;
+  $("submit").disabled=false;$("next").disabled=true;$("showAnswer").disabled=false;map(current);$("answer").focus();stats();
+}
+function start(){
+  const mode=$("mode").value;
+  pool=window.QUESTIONS.filter(q=>mode==="all"||q.category===mode).sort(()=>Math.random()-.5);
+  i=0;right=0;tried=0;current=null;locked=false;next();
+}
+$("answerForm").addEventListener("submit",e=>{
+  e.preventDefault();if(locked||!current)return;
+  tried++;const ok=current.answers.some(a=>norm(a)===norm($("answer").value.trim()));
+  if(ok){
+    right++;locked=true;$("feedback").textContent="正解！";$("feedback").className="feedback good";
+    $("answer").disabled=true;$("submit").disabled=true;$("next").disabled=false;$("showAnswer").disabled=true;
+  }else{
+    $("feedback").textContent="不正解。もう一度考えてみよう。";$("feedback").className="feedback bad";
+  }
+  stats();
+});
+$("next").addEventListener("click",()=>{if(locked){i++;next();}});
+$("showAnswer").addEventListener("click",()=>{
+  if(locked||!current)return;tried++;locked=true;
+  $("feedback").textContent=`正解：${current.answers[0]}`;$("answer").disabled=true;$("submit").disabled=true;
+  $("next").disabled=false;$("showAnswer").disabled=true;stats();
+});
+$("restart").addEventListener("click",start);$("mode").addEventListener("change",start);
+img.onload=()=>{if(current)map(current);};
+img.onerror=()=>{$("mapMessage").textContent="地図画像を読み込めません。ファイル名と配置場所を確認してください。";};
+start();
+})();

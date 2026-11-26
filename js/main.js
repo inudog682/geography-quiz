@@ -69,7 +69,7 @@ $("answerForm").addEventListener("submit",e=>{
     right++;locked=true;$("feedback").textContent="正解！";$("feedback").className="feedback good";
     $("answer").disabled=true;$("submit").disabled=true;$("next").disabled=false;$("showAnswer").disabled=true;
   }else{
-    $("feedback").textContent="不正解。もう一度考えてみよう。";$("feedback").className="feedback bad";
+    $("feedback").textContent="不正解";$("feedback").className="feedback bad";
   }
   stats();
 });
